@@ -4,9 +4,53 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AURA — AI Creator Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#090806;color:#F5EFE6;font-family:'Syne',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 20px;position:relative;overflow:hidden;}
+body::before{content:'';position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(201,148,58,0.08) 0%,transparent 65%);pointer-events:none;}
+.logo{font-size:48px;color:#C9943A;margin-bottom:16px;}
+h1{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(40px,10vw,72px);line-height:1.05;margin-bottom:16px;}
+h1 em{color:#C9943A;font-style:italic;}
+p{font-size:16px;color:rgba(245,239,230,0.5);line-height:1.75;max-width:480px;margin:0 auto 36px;}
+.badge{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(201,148,58,0.3);border-radius:99px;padding:6px 16px;font-size:11px;letter-spacing:0.16em;color:#C9943A;margin-bottom:24px;}
+.dot{width:6px;height:6px;border-radius:50%;background:#C9943A;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.form{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:16px;}
+input{background:rgba(255,255,255,0.05);border:1px solid rgba(201,148,58,0.2);border-radius:10px;padding:14px 18px;color:#F5EFE6;font-family:'Syne',sans-serif;font-size:13px;outline:none;width:260px;}
+input::placeholder{color:rgba(245,239,230,0.35);}
+input:focus{border-color:#C9943A;}
+button{background:#C9943A;border:none;border-radius:10px;padding:14px 28px;color:#090806;font-family:'Syne',sans-serif;font-size:12px;font-weight:800;letter-spacing:0.12em;cursor:pointer;}
+button:hover{background:#E8B96A;}
+.note{font-size:11px;color:rgba(245,239,230,0.25);letter-spacing:0.08em;}
+.stats{display:flex;gap:32px;justify-content:center;margin-top:48px;flex-wrap:wrap;}
+.stat-val{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:300;color:#F5EFE6;}
+.stat-val span{color:#C9943A;}
+.stat-lbl{font-size:9px;letter-spacing:0.16em;color:rgba(245,239,230,0.35);font-weight:600;margin-top:4px;}
+</style>
 </head>
 <body>
-<h1>AURA Platform</h1>
-<p>Coming soon.</p>
+<div class="badge"><span class="dot"></span>AI CREATOR OPERATING SYSTEM</div>
+<div class="logo">♛</div>
+<h1>Build & monetize<br><em>AI personas.</em></h1>
+<p>The luxury command center for creators and agencies. Design, deploy, automate, and scale revenue — all from one place.</p>
+<div class="form">
+<input type="email" placeholder="your@email.com" id="email"/>
+<button onclick="join()">JOIN WAITLIST →</button>
+</div>
+<p class="note">No credit card required · Launching soon</p>
+<div class="stats">
+<div><div class="stat-val"><span>12</span>K+</div><div class="stat-lbl">CREATORS</div></div>
+<div><div class="stat-val"><span>$</span>4.2M</div><div class="stat-lbl">GENERATED</div></div>
+<div><div class="stat-val">48<span>K</span></div><div class="stat-lbl">PERSONAS</div></div>
+</div>
+<script>
+function join(){
+  const e=document.getElementById('email').value;
+  if(!e){alert('Enter your email!');return;}
+  alert('You\'re on the list! We\'ll be in touch soon. ✦');
+}
+</script>
 </body>
 </html>
+
