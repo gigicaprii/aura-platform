@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AURA Founder Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--gold:#C9943A;--gold-l:#E8B96A;--gold-d:rgba(201,148,58,0.12);--bg:#090806;--s1:#0F0D0A;--s2:#161310;--b1:rgba(201,148,58,0.2);--b2:rgba(201,148,58,0.08);--t:#F5EFE6;--m:rgba(245,239,230,0.45);--m2:rgba(245,239,230,0.2);--green:#4CAF7D;--red:#E05C5C;--blue:#5C8AE0;}
+body{background:var(--bg);color:var(--t);font-family:'Syne',sans-serif;min-height:100vh;}
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
+.login-glow{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:500px;height:500px;background:radial-gradient(circle,rgba(201,148,58,0.07) 0%,transparent 65%);pointer-events:none;}
+.login-card{background:var(--s1);border:1px solid var(--b1);border-radius:16px;padding:36px;width:100%;max-width:400px;position:relative;z-index:1;}
+.logo{display:flex;align-items:center;gap:10px;justify-content:center;margin-bottom:8px;}
+.logo-icon{color:var(--gold);font-size:28px;}
+.logo-text{font-weight:800;font-size:18px;letter-spacing:0.22em;color:var(--gold);}
+.login-badge{display:block;text-align:center;font-size:9px;letter-spacing:0.18em;color:var(--m);margin-bottom:24px;}
+.login-title{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:28px;text-align:center;margin-bottom:6px;}
+.login-title em{color:var(--gold);font-style:italic;}
+.login-sub{font-size:11px;color:var(--m);text-align:center;margin-bottom:24px;}
+.fld{margin-bottom:14px;}
+.fld-lbl{font-size:9px;letter-spacing:0.16em;color:var(--gold);font-weight:700;display:block;margin-bottom:7px;}
+.fld-inp{width:100%;background:rgba(255,255,255,0.03);border:1px solid var(--b2);border-radius:9px;padding:13px 14px;color:var(--t);font-family:'Syne',sans-serif;font-size:13px;outline:none;transition:border-color 0.2s;}
+.fld-inp:focus{border-color:var(--gold);}
+.fld-inp::placeholder{color:var(--m);}
+.login-btn{width:100%;padding:14px;border-radius:9px;background:var(--gold);border:none;color:var(--bg);font-family:'Syne',sans-serif;font-size:12px;font-weight:800;letter-spacing:0.12em;cursor:pointer;margin-top:4px;}
+.login-btn:hover{background:var(--gold-l);}
+.err{background:rgba(224,92,92,0.1);border:1px solid rgba(224,92,92,0.25);color:#F4A0A0;font-size:11px;padding:10px 12px;border-radius:7px;margin-bottom:14px;text-align:center;display:none;}
+.note{margin-top:14px;padding:10px;background:var(--gold-d);border:1px solid var(--b1);border-radius:8px;font-size:10px;color:var(--m);line-height:1.7;text-align:center;}
+.note strong{color:var(--gold);}
+.dash{display:none;flex-direction:column;min-height:100vh;}
+.dash.on{display:flex;}
+.topbar{height:58px;background:var(--s1);border-bottom:1px solid var(--b2);display:flex;align-items:center;justify-content:space-between;padding:0 20px;position:sticky;top:0;z-index:10;}
+.tlogo{display:flex;align-items:center;gap:8px;}
+.tlogo-icon{color:var(--gold);font-size:17px;}
+.tlogo-text{font-weight:800;font-size:13px;letter-spacing:0.2em;color:var(--gold);}
+.tbadge{font-size:7px;background:var(--gold);color:var(--bg);border-radius:3px;padding:2px 6px;font-weight:800;}
+.tr{display:flex;align-items:center;gap:8px;}
+.live{display:flex;align-items:center;gap:5px;font-size:9px;font-weight:700;color:var(--green);background:rgba(76,175,125,0.1);border:1px solid rgba(76,175,125,0.2);padding:5px 10px;border-radius:99px;}
+.ldot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:p 2s infinite;}
+@keyframes p{0%,100%{opacity:1}50%{opacity:0.3}}
+.out-btn{padding:6px 12px;border-radius:7px;background:transparent;border:1px solid var(--b1);color:var(--m);font-family:'Syne',sans-serif;font-size:10px;font-weight:700;cursor:pointer;}
+.tabs{display:flex;gap:0;background:var(--s1);border-bottom:1px solid var(--b2);overflow-x:auto;padding:0 16px;}
+.tab{padding:10px 16px;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;cursor:pointer;border:none;background:transparent;color:var(--m);white-space:nowrap;border-bottom:2px solid transparent;}
+.tab.on{color:var(--gold);border-bottom-color:var(--gold);}
+.body{flex:1;padding:20px;overflow-y:auto;}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:18px;}
+.sc{background:var(--s1);border:1px solid var(--b2);border-radius:11px;padding:15px;}
+.sl{font-size:8px;letter-spacing:0.14em;color:var(--m);font-weight:600;margin-bottom:7px;}
+.sv{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;line-height:1;margin-bottom:4px;}
+.sv em{color:var(--gold);font-style:normal;}
+.ss{font-size:10px;color:var(--green);}
+.card{background:var(--s1);border:1px solid var(--b2);border-radius:11px;padding:16px;margin-bottom:14px;}
+.chd{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.ct{font-size:9px;letter-spacing:0.14em;color:var(--gold);font-weight:700;}
+.prog-wrap{margin-bottom:18px;}
+.prog-lbl{display:flex;justify-content:space-between;font-size:11px;margin-bottom:5px;}
+.prog-lbl span{color:var(--m);}
+.prog-lbl strong{color:var(--gold);}
+.prog-track{height:8px;background:var(--b2);border-radius:99px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-l));border-radius:99px;transition:width 1s ease;}
+.ms{display:flex;justify-content:space-between;margin-top:5px;}
+.m{font-size:9px;color:var(--m2);text-align:center;}
+.m.hit{color:var(--green);font-weight:700;}
+.row{display:flex;align-items:flex-start;gap:8px;padding:8px 0;border-bottom:1px solid var(--b2);}
+.row:last-child{border-bottom:none;}
+.dot{width:6px;height:6px;border-radius:50%;margin-top:4px;flex-shrink:0;}
+.rt{font-size:11px;color:var(--m);flex:1;line-height:1.5;}
+.rt strong{color:var(--t);}
+.rtime{font-size:9px;color:var(--m2);}
+.tbl{width:100%;border-collapse:collapse;}
+.th{font-size:8px;letter-spacing:0.12em;color:var(--gold);font-weight:700;padding:7px 10px;text-align:left;border-bottom:1px solid var(--b1);}
+.td{font-size:11px;color:var(--m);padding:9px 10px;border-bottom:1px solid var(--b2);}
+.tn{font-weight:700;color:var(--t);}
+.te{font-size:9px;color:var(--m2);}
+.bdg{display:inline-flex;align-items:center;padding:2px 7px;border-radius:3px;font-size:8px;font-weight:700;}
+.b-new{background:rgba(92,138,224,0.1);color:var(--blue);border:1px solid rgba(92,138,224,0.2);}
+.b-inv{background:rgba(76,175,125,0.1);color:var(--green);border:1px solid rgba(76,175,125,0.2);}
+.ibtn{padding:4px 10px;border-radius:5px;background:var(--gold);border:none;color:var(--bg);font-family:'Syne',sans-serif;font-size:9px;font-weight:800;cursor:pointer;}
+.ibtn.done{background:rgba(76,175,125,0.12);color:var(--green);border:1px solid rgba(76,175,125,0.2);}
+.empty{text-align:center;padding:32px;color:var(--m);}
+.eicon{font-size:32px;margin-bottom:10px;opacity:0.4;}
+.etitle{font-size:15px;font-weight:700;color:var(--t);margin-bottom:5px;}
+.qlink{display:flex;align-items:center;gap:8px;padding:11px 13px;background:var(--s2);border:1px solid var(--b2);border-radius:8px;font-size:11px;color:var(--t);text-decoration:none;margin-bottom:8px;}
+.spin{display:inline-block;width:18px;height:18px;border:2px solid var(--b2);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.load{display:flex;align-items:center;gap:10px;padding:30px;color:var(--m);font-size:12px;justify-content:center;}
+.goal-card{background:linear-gradient(135deg,rgba(201,148,58,0.07),var(--s1));border:1px solid var(--b1);border-radius:11px;padding:18px;margin-bottom:16px;position:relative;overflow:hidden;}
+.goal-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,var(--gold),transparent);}
+.demo-note{margin-top:10px;padding:8px 12px;background:var(--gold-d);border-radius:6px;font-size:9px;color:var(--gold);text-align:center;}
+.setup-box{padding:14px 16px;background:var(--s2);border:1px solid var(--b2);border-radius:9px;margin-bottom:10px;}
+.snum{width:26px;height:26px;border-radius:50%;background:var(--gold-d);border:1px solid var(--b1);display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--gold);margin-right:10px;flex-shrink:0;}
+.scode{font-size:10px;color:var(--gold);background:rgba(201,148,58,0.08);padding:3px 7px;border-radius:4px;font-family:monospace;display:block;margin-top:6px;word-break:break-all;}
+@media(min-width:600px){.stats{grid-template-columns:repeat(4,1fr);}}
+</style>
+</head>
+<body>
+
+<div class="login-wrap" id="lw">
+  <div class="login-glow"></div>
+  <div class="login-card">
+    <div class="logo"><span class="logo-icon">♛</span><span class="logo-text">AURA</span></div>
+    <span class="login-badge">FOUNDER PORTAL · OWNER ONLY</span>
+    <div class="login-title">Welcome <em>back.</em></div>
+    <p class="login-sub">Sign in to your founder dashboard</p>
+    <div class="err" id="err"></div>
+    <div class="fld"><label class="fld-lbl">EMAIL</label><input class="fld-inp" type="email" id="em" placeholder="your@email.com" onkeydown="if(event.key==='Enter')go()"/></div>
+    <div class="fld"><label class="fld-lbl">PASSWORD</label><input class="fld-inp" type="password" id="pw" placeholder="••••••••" onkeydown="if(event.key==='Enter')go()"/></div>
+    <button class="login-btn" onclick="go()">ENTER PORTAL →</button>
+    <div class="note"><strong>Tip:</strong> Use your Supabase email + password.<br>Any email + password works in demo mode.</div>
+  </div>
+</div>
+
+<div class="dash" id="dash">
+  <div class="topbar">
+    <div class="tlogo"><span class="tlogo-icon">♛</span><span class="tlogo-text">AURA</span><span class="tbadge">FOUNDER</span></div>
+    <div class="tr"><div class="live"><span class="ldot"></span>LIVE</div><button class="out-btn" onclick="out()">Sign Out</button></div>
+  </div>
+  <div class="tabs">
+    <button class="tab on" onclick="sw('ov',this)">◈ Overview</button>
+    <button class="tab" onclick="sw('wl',this)">⏳ Waitlist</button>
+    <button class="tab" onclick="sw('mb',this)">👥 Members</button>
+    <button class="tab" onclick="sw('st',this)">⚙️ Setup</button>
+  </div>
+  <div class="body">
+
+    <div id="pov">
+      <div class="goal-card">
+        <div class="chd"><span class="ct">WAITLIST GOAL</span><span style="font-size:10px;color:var(--m)" id="gsub">Building toward launch...</span></div>
+        <div class="prog-wrap">
+          <div class="prog-lbl"><span>Signups</span><strong id="gcnt">0 / 30</strong></div>
+          <div class="prog-track"><div class="prog-fill" id="gfill" style="width:0%"></div></div>
+          <div class="ms">
+            <div class="m" id="m5">5 — invites</div>
+            <div class="m" id="m10">10 — test</div>
+            <div class="m" id="m20">20 — deploy</div>
+            <div class="m" id="m30">30 — LAUNCH 🚀</div>
+          </div>
+        </div>
+      </div>
+      <div class="stats">
+        <div class="sc"><div class="sl">WAITLIST</div><div class="sv" id="s1">0</div><div class="ss" id="s1s">Loading...</div></div>
+        <div class="sc"><div class="sl">INVITED</div><div class="sv" id="s2">0</div><div class="ss">Sent access</div></div>
+        <div class="sc"><div class="sl">MEMBERS</div><div class="sv">0</div><div class="ss">Paying</div></div>
+        <div class="sc"><div class="sl">MRR</div><div class="sv"><em>$</em>0</div><div class="ss">Recurring</div></div>
+      </div>
+      <div class="card">
+        <div class="chd"><span class="ct">RECENT SIGNUPS</span></div>
+        <div id="rec"><div class="load"><span class="spin"></span>Loading...</div></div>
+      </div>
+      <div class="card">
+        <div class="chd"><span class="ct">QUICK LINKS</span></div>
+        <a class="qlink" href="https://aura-platform-bfgs.vercel.app" target="_blank">🌐 Live Waitlist Page</a>
+        <a class="qlink" href="https://supabase.com" target="_blank">🗄️ Supabase Dashboard</a>
+        <a class="qlink" href="https://vercel.com" target="_blank">🚀 Vercel Dashboard</a>
+        <a class="qlink" href="https://github.com/gigicaprii/aura-platform" target="_blank">💻 GitHub Repo</a>
+        <a class="qlink" href="https://elevenlabs.io" target="_blank">🎙️ ElevenLabs</a>
+        <a class="qlink" href="https://higgsfield.ai" target="_blank">✨ Higgsfield</a>
+      </div>
+    </div>
+
+    <div id="pwl" style="display:none">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+        <div style="font-size:11px;color:var(--m)" id="wlc">Loading...</div>
+        <button onclick="invAll()" style="padding:8px 16px;border-radius:7px;background:var(--gold);border:none;color:var(--bg);font-family:'Syne',sans-serif;font-size:10px;font-weight:700;cursor:pointer;">Invite All →</button>
+      </div>
+      <div style="padding:12px 14px;background:var(--gold-d);border:1px solid var(--b1);border-radius:9px;margin-bottom:14px;font-size:11px;color:var(--m);line-height:1.7;">
+        🎯 <strong style="color:var(--t);">Goal: 30 signups</strong> before full launch. Invite 5-10 at a time to create scarcity.
+      </div>
+      <div class="card"><div class="chd"><span class="ct">ALL SIGNUPS</span></div><div id="wlt"><div class="load"><span class="spin"></span>Loading...</div></div></div>
+    </div>
+
+    <div id="pmb" style="display:none">
+      <div class="card">
+        <div class="chd"><span class="ct">PAYING MEMBERS</span></div>
+        <div class="empty"><div class="eicon">👥</div><div class="etitle">No members yet</div><div style="font-size:11px;color:var(--m)">Members appear here after launch when people subscribe.</div></div>
+      </div>
+    </div>
+
+    <div id="pst" style="display:none">
+      <div class="card">
+        <div class="chd"><span class="ct">CONNECT REAL DATA</span></div>
+        <p style="font-size:12px;color:var(--m);margin-bottom:16px;line-height:1.7">Update these 2 lines in admin.html with your real Supabase credentials to see live waitlist data.</p>
+        <div class="setup-box"><div style="display:flex;align-items:flex-start"><span class="snum">1</span><div><div style="font-size:12px;font-weight:700">Get your Project URL</div><div style="font-size:11px;color:var(--m)">supabase.com → aura project → Settings → API</div><span class="scode">https://mqhomoqcndriizevpykm.supabase.co</span></div></div></div>
+        <div class="setup-box"><div style="display:flex;align-items:flex-start"><span class="snum">2</span><div><div style="font-size:12px;font-weight:700">Get your Anon Key</div><div style="font-size:11px;color:var(--m)">Same page → copy anon public key</div><span class="scode">eyJhbGci... (long key starting with eyJ)</span></div></div></div>
+        <div class="setup-box"><div style="display:flex;align-items:flex-start"><span class="snum">3</span><div><div style="font-size:12px;font-weight:700">Edit admin.html in GitHub</div><div style="font-size:11px;color:var(--m)">Find and replace these 2 lines at the bottom of the file:</div><span class="scode">const SB_URL = 'https://mqhomoqcndriizevpykm.supabase.co';</span><span class="scode" style="margin-top:4px">const SB_KEY = 'your-anon-key-here';</span></div></div></div>
+        <div class="setup-box"><div style="display:flex;align-items:flex-start"><span class="snum">4</span><div><div style="font-size:12px;font-weight:700">Bookmark your portal</div><div style="font-size:11px;color:var(--m)">After committing, visit and bookmark:</div><span class="scode">aura-platform-bfgs.vercel.app/admin.html</span></div></div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const SB_URL = 'https://mqhomoqcndriizevpykm.supabase.co';
+const SB_KEY = 'your-anon-key-here';
+
+const DEMO = [
+  {id:1,name:'Brianna J.',email:'brianna@gmail.com',role:'Solo creator',created_at:'2026-05-19T14:22:00Z',invited:false},
+  {id:2,name:'Keisha M.',email:'keisha@gmail.com',role:'Agency owner',created_at:'2026-05-19T11:08:00Z',invited:false},
+  {id:3,name:'Sofia R.',email:'sofia@gmail.com',role:'Solo creator',created_at:'2026-05-18T20:44:00Z',invited:true},
+  {id:4,name:'Zara P.',email:'zara@gmail.com',role:'Agency owner',created_at:'2026-05-18T16:30:00Z',invited:false},
+  {id:5,name:'Maya T.',email:'maya@gmail.com',role:'Solo creator',created_at:'2026-05-17T09:15:00Z',invited:true},
+  {id:6,name:'Alexis W.',email:'alexis@gmail.com',role:'Solo creator',created_at:'2026-05-17T08:00:00Z',invited:false},
+];
+
+let wl=[]; let demo=false; let tok='';
+
+async function go(){
+  const em=document.getElementById('em').value.trim();
+  const pw=document.getElementById('pw').value.trim();
+  if(!em||!pw){showErr('Enter email and password.');return;}
+  document.getElementById('err').style.display='none';
+  try{
+    const r=await fetch(`${SB_URL}/auth/v1/token?grant_type=password`,{method:'POST',headers:{'Content-Type':'application/json','apikey':SB_KEY},body:JSON.stringify({email:em,password:pw})});
+    const d=await r.json();
+    if(d.access_token){tok=d.access_token;demo=false;enter();return;}
+  }catch(e){}
+  demo=true;enter();
+}
+
+function showErr(m){const e=document.getElementById('err');e.textContent=m;e.style.display='block';}
+function out(){sessionStorage.removeItem('at');document.getElementById('lw').style.display='flex';document.getElementById('dash').classList.remove('on');}
+
+function enter(){
+  document.getElementById('lw').style.display='none';
+  document.getElementById('dash').classList.add('on');
+  load();
+}
+
+window.onload=()=>{const t=sessionStorage.getItem('at');if(t){tok=t;demo=false;enter();}};
+
+async function load(){
+  try{
+    const r=await fetch(`${SB_URL}/rest/v1/waitlist?order=created_at.desc&select=*`,{headers:{'apikey':SB_KEY,'Authorization':`Bearer ${tok||SB_KEY}`}});
+    const d=await r.json();
+    if(Array.isArray(d)){wl=d;demo=false;}else{wl=DEMO;demo=true;}
+  }catch(e){wl=DEMO;demo=true;}
+  renderOv();renderWl();
+}
+
+function renderOv(){
+  const tot=wl.length,inv=wl.filter(w=>w.invited).length,pct=Math.min((tot/30)*100,100);
+  document.getElementById('s1').textContent=tot;
+  document.getElementById('s2').textContent=inv;
+  document.getElementById('s1s').textContent=demo?'Demo mode':`${tot-inv} pending`;
+  document.getElementById('gcnt').textContent=`${tot} / 30`;
+  document.getElementById('gfill').style.width=`${pct}%`;
+  document.getElementById('gsub').textContent=tot>=30?'🚀 Ready to launch!':tot>=20?'🔥 Deploy the app!':tot>=10?'✨ Keep posting!':'Share your waitlist link!';
+  [['m5',5],['m10',10],['m20',20],['m30',30]].forEach(([id,n])=>{document.getElementById(id).className='m'+(tot>=n?' hit':'');});
+  const el=document.getElementById('rec');
+  if(!wl.length){el.innerHTML='<div class="empty"><div class="eicon">⏳</div><div class="etitle">No signups yet</div><div style="font-size:11px;color:var(--m)">Share your waitlist page to get started!</div></div>';return;}
+  el.innerHTML=wl.slice(0,5).map(w=>`<div class="row"><div class="dot" style="background:${w.invited?'#4CAF7D':'#C9943A'}"></div><div class="rt"><strong>${w.name}</strong> — ${w.role||'Creator'}<br><span style="font-size:9px">${w.email}</span></div><div class="rtime">${ago(w.created_at)}</div></div>`).join('')+(demo?'<div class="demo-note">Demo data — add your Supabase key to see real signups</div>':'');
+}
+
+function renderWl(){
+  const tot=wl.length,inv=wl.filter(w=>w.invited).length;
+  document.getElementById('wlc').textContent=`${tot} total · ${inv} invited · ${tot-inv} pending`;
+  const el=document.getElementById('wlt');
+  if(!tot){el.innerHTML='<div class="empty"><div class="eicon">⏳</div><div class="etitle">No signups yet</div><div style="font-size:11px;color:var(--m)">Your waitlist: <strong style="color:var(--gold)">aura-platform-bfgs.vercel.app</strong></div></div>';return;}
+  el.innerHTML=`<div style="overflow-x:auto"><table class="tbl"><thead><tr><th class="th">#</th><th class="th">NAME</th><th class="th">EMAIL</th><th class="th">ROLE</th><th class="th">WHEN</th><th class="th">STATUS</th><th class="th">ACTION</th></tr></thead><tbody>${wl.map((w,i)=>`<tr><td class="td" style="color:var(--m2)">${i+1}</td><td class="td"><div class="tn">${w.name}</div></td><td class="td"><div class="te">${w.email}</div></td><td class="td">${w.role||'—'}</td><td class="td">${ago(w.created_at)}</td><td class="td"><span class="bdg ${w.invited?'b-inv':'b-new'}">${w.invited?'✓ Invited':'● Pending'}</span></td><td class="td">${w.invited?`<button class="ibtn done" disabled>✓ Done</button>`:`<button class="ibtn" onclick="inv(${w.id})">Invite →</button>`}</td></tr>`).join('')}</tbody></table></div>`+(demo?'<div class="demo-note">Demo data — add your Supabase anon key to see real signups</div>':'');
+}
+
+function inv(id){wl=wl.map(w=>w.id===id?{...w,invited:true}:w);renderOv();renderWl();}
+function invAll(){wl=wl.map(w=>({...w,invited:true}));renderOv();renderWl();}
+
+function sw(name,btn){
+  ['ov','wl','mb','st'].forEach(n=>{const el=document.getElementById('p'+n);if(el)el.style.display=n===name?'block':'none';});
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  btn.classList.add('on');
+}
+
+function ago(iso){
+  if(!iso)return'—';
+  const d=Date.now()-new Date(iso).getTime(),m=Math.floor(d/60000);
+  if(m<1)return'Just now';if(m<60)return`${m}m ago`;
+  const h=Math.floor(m/60);if(h<24)return`${h}h ago`;
+  const dy=Math.floor(h/24);if(dy<7)return`${dy}d ago`;
+  return new Date(iso).toLocaleDateString();
+}
+</script>
+</body>
+</html>
